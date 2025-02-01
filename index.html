@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snack Recipe Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="glass-rect">
+            <nav class="nav-bar">
+                <div class="nav-brand">Recipe Generator</div>
+                <ul class="nav-items">
+                    <li class="nav-item" onclick="location.href='/'">🏠 Home</li>
+                    <li class="nav-item" onclick="window.location.href='/about'">ℹ️ About</li>
+                    <li class="nav-item" onclick="location.href='/contact'">📧 Contact</li> 
+                </ul>
+            </nav>
+            <div class="main">
+                <h2 class="main-title">Generate Recipes by Ingredient</h2>
+
+                <div class="search-section">
+                    <input type="text" id="ingredient-input" placeholder="Enter ingredient (e.g., chicken, oats)">
+                    <button id="search-recipe-btn" class="btn-boost">Search Recipes</button>
+                </div>
+
+                <div class="button-container">
+                    <button id="generate-shake-btn" class="btn-boost">Random Shake</button>
+                    <button id="generate-snack-btn" class="btn-boost">Random Snack</button>
+                </div>
+
+                <div class="recipe-section">
+                    <h3 id="recipe-name">Select an option above</h3>
+                    <ul id="recipe-ingredients"></ul>
+                    <p id="recipe-instructions"></p>
+                    <p id="recipe-url"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function fetchRecipe(apiUrl) {
+                fetch(apiUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.json().then(err => {
+                                throw new Error(err.error || "Unknown error");
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (!data.label) throw new Error("No valid recipe found.");
+
+                        document.getElementById("recipe-name").innerText = data.label;
+                        document.getElementById("recipe-ingredients").innerHTML =
+                            data.ingredientLines.map(ing => `<li>${ing}</li>`).join('');
+                        document.getElementById("recipe-instructions").innerText = data.instructions || "";
+
+                        if (data.url) {
+                            document.getElementById("recipe-url").innerHTML =
+                                `<a href="${data.url}" target="_blank">View Full Recipe →</a>`;
+                        } else {
+                            document.getElementById("recipe-url").innerHTML = "";
+                        }
+                    })
+                    .catch(error => {
+                        document.getElementById("recipe-name").innerText = 'Error: ' + error.message;
+                        document.getElementById("recipe-ingredients").innerHTML = '';
+                        document.getElementById("recipe-instructions").innerText = '';
+                        document.getElementById("recipe-url").innerText = '';
+                    });
+            }
+
+            document.getElementById("search-recipe-btn").addEventListener("click", function () {
+                let ingredient = document.getElementById('ingredient-input').value.trim();
+                fetchRecipe(`/api/recipe?ingredient=${encodeURIComponent(ingredient)}`);
+            });
+
+            document.getElementById("generate-shake-btn").addEventListener("click", function () {
+                fetchRecipe("/api/random_shake");
+            });
+
+            document.getElementById("generate-snack-btn").addEventListener("click", function () {
+                fetchRecipe("/api/random_snack");
+            });
+        });
+    </script>
+</body>
+</html>
