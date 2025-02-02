@@ -1,7 +1,7 @@
 # About the project
 
 ## Our Mission
-We believe that great meals start with what’s in your kitchen, and our smart recipe suggestions ensure that no ingredient goes to waste.
+We believe that great meals start with what’s in your kitchen, and our smart recipe suggestions ensure that no ingredient goes to waste, access the best recipes worldwide with the ingredients you have in your kitchen through our fun application.
 
 ## What We Value?
 We are dedicated to making cooking effortless, enjoyable, and accessible to everyone. Whether you’re a seasoned chef or just experimenting, we provide inspiration tailored to you.
