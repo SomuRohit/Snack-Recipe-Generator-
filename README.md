@@ -11,5 +11,11 @@ We are dedicated to making cooking effortless, enjoyable, and accessible to ever
 * Flask
 * Html,Css,Js
 
+## How to run?
+'''bash
+pip install python flask
+python app.py
+'''
+
 
 
